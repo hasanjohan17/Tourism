@@ -554,7 +554,7 @@ export default function AdminDashboard({ goHome }) {
 
   return (
     <>
-      <div className="min-h-screen bg-linen">
+      <div className="min-h-screen bg-linen" dir="rtl" lang="ar">
       {/* Header */}
       <header className="border-b border-ink/8 bg-white">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -578,7 +578,7 @@ export default function AdminDashboard({ goHome }) {
             <button
               type="button"
               onClick={handleSignOut}
-              className="inline-flex items-center gap-2 rounded-2xl bg-ink px-4 py-2.5 text-sm font-black text-white transition hover:bg-marine"
+              className="neuro-button-primary inline-flex items-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-black"
             >
               <LogOut className="h-4 w-4" />
               خروج
@@ -602,7 +602,7 @@ export default function AdminDashboard({ goHome }) {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 border-b-4 px-1 py-4 font-bold transition-all duration-300 ${
+                  className={`neuro-tab flex items-center gap-2 border-b-4 px-1 py-4 font-bold transition-all duration-300 ${
                     activeTab === tab.id
                       ? "border-jade text-jade shadow-[0_14px_36px_-14px_rgba(21,154,140,0.45)]"
                       : "border-transparent text-ink/56 hover:text-ink"
@@ -1211,3 +1211,4 @@ export default function AdminDashboard({ goHome }) {
     </>
   );
 }
+

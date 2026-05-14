@@ -227,3 +227,105 @@ img[src*="png"] {
     box-shadow: none !important;
   }
 }
+
+/* ===== NEUMORPHISM / SKEW MORPHISM STYLES ===== */
+.neuro-button {
+  background: linear-gradient(145deg, #f8f4ed, #e8e0d5);
+  border: none;
+  border-radius: 1.25rem;
+  box-shadow:
+    0.3rem 0.3rem 0.6rem rgba(23, 33, 43, 0.15),
+    -0.2rem -0.2rem 0.5rem rgba(255, 255, 255, 0.7);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.neuro-button:hover {
+  box-shadow:
+    0.2rem 0.2rem 0.4rem rgba(23, 33, 43, 0.1),
+    -0.1rem -0.1rem 0.3rem rgba(255, 255, 255, 0.8),
+    inset 0.15rem 0.15rem 0.3rem rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.neuro-button:active {
+  box-shadow:
+    0.1rem 0.1rem 0.2rem rgba(23, 33, 43, 0.1),
+    -0.1rem -0.1rem 0.2rem rgba(255, 255, 255, 0.5),
+    inset 0.15rem 0.15rem 0.3rem rgba(23, 33, 43, 0.1);
+  transform: translateY(0);
+}
+
+.neuro-button-primary {
+  background: linear-gradient(145deg, #159a8c, #0f6b7d);
+  color: white;
+  box-shadow:
+    0.3rem 0.3rem 0.8rem rgba(15, 107, 125, 0.4),
+    -0.2rem -0.2rem 0.5rem rgba(255, 255, 255, 0.1);
+}
+
+.neuro-button-primary:hover {
+  box-shadow:
+    0.2rem 0.2rem 0.6rem rgba(15, 107, 125, 0.3),
+    -0.1rem -0.1rem 0.4rem rgba(255, 255, 255, 0.15),
+    inset 0.1rem 0.1rem 0.3rem rgba(255, 255, 255, 0.2);
+}
+
+.neuro-input {
+  background: linear-gradient(145deg, #ffffff, #f2ede6);
+  border: 1px solid rgba(23, 33, 43, 0.06);
+  border-radius: 1.25rem;
+  box-shadow:
+    0.2rem 0.2rem 0.4rem rgba(23, 33, 43, 0.08),
+    -0.1rem -0.1rem 0.3rem rgba(255, 255, 255, 0.6),
+    inset 0.1rem 0.1rem 0.2rem rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+}
+
+.neuro-input:focus {
+  box-shadow:
+    0.2rem 0.2rem 0.4rem rgba(21, 154, 140, 0.2),
+    -0.1rem -0.1rem 0.3rem rgba(255, 255, 255, 0.7),
+    inset 0.1rem 0.1rem 0.2rem rgba(21, 154, 140, 0.1);
+  border-color: rgba(21, 154, 140, 0.3);
+}
+
+.neuro-card {
+  background: linear-gradient(145deg, #ffffff, #f8f4ed);
+  border-radius: 1.75rem;
+  box-shadow:
+    0.4rem 0.4rem 0.8rem rgba(23, 33, 43, 0.1),
+    -0.3rem -0.3rem 0.7rem rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.neuro-card:hover {
+  box-shadow:
+    0.3rem 0.3rem 0.6rem rgba(23, 33, 43, 0.08),
+    -0.2rem -0.2rem 0.6rem rgba(255, 255, 255, 0.9),
+    inset 0.1rem 0.1rem 0.3rem rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.neuro-tab {
+  position: relative;
+  background: linear-gradient(145deg, #ffffff, #f5f0ea);
+  border: none;
+  border-radius: 1rem 1rem 0 0;
+  box-shadow:
+    0.15rem 0.15rem 0.3rem rgba(23, 33, 43, 0.06),
+    -0.1rem -0.1rem 0.2rem rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.neuro-tab.active {
+  background: linear-gradient(145deg, #159a8c, #0f6b7d);
+  color: white;
+  box-shadow:
+    0.2rem 0.2rem 0.5rem rgba(15, 107, 125, 0.3),
+    -0.1rem -0.1rem 0.4rem rgba(255, 255, 255, 0.2),
+    inset 0.1rem 0.1rem 0.3rem rgba(255, 255, 255, 0.15);
+}
