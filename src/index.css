@@ -36,7 +36,23 @@ textarea {
 
 img {
   max-width: 100%;
+  image-rendering: crisp-edges;
   image-rendering: auto;
+  display: block;
+  height: auto;
+}
+
+img[src*="jpg"],
+img[src*="jpeg"],
+img[src*="png"] {
+  image-rendering: -webkit-optimize-contrast;
+}
+
+.bg-image {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 .glass-panel {
@@ -107,35 +123,63 @@ img {
     opacity 600ms ease;
 }
 
-@keyframes heroKenburnsReverse {
+@keyframes heroKenburnsSmooth {
   0% {
-    transform: scale(1.06) translate3d(0, 0, 0);
-  }
-
-  100% {
-    transform: scale(1.16) translate3d(2.2%, -2%, 0);
-  }
-}
-
-@keyframes heroShimmer {
-  0%,
-  100% {
-    opacity: 0.38;
+    transform: scale(1.02) translate3d(0, 0, 0);
+    opacity: 0.9;
   }
 
   50% {
-    opacity: 0.52;
-  }
-}
-
-@keyframes heroKenburns {
-  0% {
-    transform: scale(1.04) translate3d(0, 0, 0);
+    transform: scale(1.12) translate3d(-1.5%, 1%, 0);
+    opacity: 1;
   }
 
   100% {
-    transform: scale(1.14) translate3d(-2.5%, 1.5%, 0);
+    transform: scale(1.08) translate3d(1%, -1%, 0);
+    opacity: 0.95;
   }
+}
+
+@keyframes heroGradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes imagePulseQuality {
+  0%,
+  100% {
+    filter: brightness(1) contrast(1);
+  }
+
+  50% {
+    filter: brightness(1.05) contrast(1.05);
+  }
+}
+
+.hero-image-animated {
+  animation: heroKenburnsSmooth 20s ease-in-out infinite !important;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.hero-gradient-animated {
+  background-size: 400% 400%;
+  animation: heroGradientShift 15s ease infinite;
+}
+
+.image-quality-boost {
+  image-rendering: -webkit-optimize-contrast;
+  filter: contrast(1.02) brightness(1.01);
 }
 
 @keyframes heroReveal {

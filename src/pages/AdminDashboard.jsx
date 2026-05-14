@@ -409,6 +409,29 @@ export default function AdminDashboard({ goHome }) {
     }
   };
 
+  const deleteBooking = async (bookingId) => {
+    if (
+      !confirm(
+        "هل أنت متأكد من رغبتك في حذف هذه الحجز؟ هذا الإجراء لا يمكن التراجع عنه.",
+      )
+    ) {
+      return;
+    }
+    try {
+      setLoading(true);
+      const { error } = await supabase.from("plan_requests").delete().eq("id", bookingId);
+
+      if (error) throw error;
+      alert("تم حذف الحجز بنجاح!");
+      await loadPlanRequests();
+    } catch (error) {
+      console.error("Error deleting booking:", error);
+      alert("خطأ: " + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const addPlan = async (e) => {
     e.preventDefault();
     if (!planForm.image_url?.trim()) {
@@ -474,19 +497,23 @@ export default function AdminDashboard({ goHome }) {
     }
     if (
       !confirm(
-        "سيتم حذف سجل الملف الشخصي (profiles) فقط. حساب تسجيل الدخول في Authentication يبقى حتى تحذفه يدوياً من لوحة Supabase. هل تريد المتابعة؟",
+        "تحذير: سيتم حذف سجل المستخدم والبيانات الشخصية. هل أنت متأكد؟",
       )
     ) {
       return;
     }
     try {
       setLoading(true);
-      const { error } = await supabase.from("profiles").delete().eq("id", userId);
-
-      if (error) {
-        throw error;
+      // Delete from profiles table
+      const { error: profileError } = await supabase.from("profiles").delete().eq("id", userId);
+      
+      if (profileError) {
+        throw profileError;
       }
-      alert("تم حذف سجل الملف الشخصي.");
+      
+      // Try to delete auth user via admin API (if you have backend)
+      // For now, just notify about profiles table deletion
+      alert("تم حذف سجل المستخدم بنجاح. يمكنك حذف حساب المصادقة من Supabase Dashboard إذا لزم الأمر.");
       await loadUsers();
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -693,18 +720,16 @@ export default function AdminDashboard({ goHome }) {
               إثبات الدفع وصورة الجواز تُعرض برابط آمن لمدة ساعة. الطلبات القديمة تُستخرج من نص الملاحظات إن لزم.
             </p>
             <div className="overflow-x-auto rounded-2xl bg-white shadow-soft">
-              <table className="w-full min-w-[960px]">
+              <table className="w-full min-w-[800px]">
                 <thead className="border-b border-ink/8 bg-linen">
                   <tr>
-                    <th className="px-4 py-3 text-right text-xs font-black text-ink">التاريخ</th>
-                    <th className="px-4 py-3 text-right text-xs font-black text-ink">الاسم</th>
-                    <th className="px-4 py-3 text-right text-xs font-black text-ink">الخطة</th>
-                    <th className="px-4 py-3 text-right text-xs font-black text-ink">الهاتف</th>
-                    <th className="px-4 py-3 text-right text-xs font-black text-ink">النوع / العدد</th>
-                    <th className="px-4 py-3 text-right text-xs font-black text-ink">التقدير $</th>
-                    <th className="px-4 py-3 text-right text-xs font-black text-ink">الحالة</th>
-                    <th className="px-4 py-3 text-right text-xs font-black text-ink">إثبات الدفع</th>
-                    <th className="px-4 py-3 text-right text-xs font-black text-ink">الجواز</th>
+                    <th className="px-3 py-3 text-right text-xs font-black text-ink">التاريخ</th>
+                    <th className="px-3 py-3 text-right text-xs font-black text-ink">الاسم</th>
+                    <th className="px-3 py-3 text-right text-xs font-black text-ink">الخطة</th>
+                    <th className="px-3 py-3 text-right text-xs font-black text-ink">الحالة</th>
+                    <th className="px-3 py-3 text-right text-xs font-black text-ink">إثبات</th>
+                    <th className="px-3 py-3 text-right text-xs font-black text-ink">جواز</th>
+                    <th className="px-3 py-3 text-right text-xs font-black text-ink">حذف</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -730,66 +755,30 @@ export default function AdminDashboard({ goHome }) {
                       const quotedUsd = row.quoted_total_usd ?? meta?.quoted ?? null;
                       return (
                         <tr key={row.id} className="border-t border-ink/8 hover:bg-linen/40">
-                          <td className="px-4 py-3 text-xs text-ink/68">
-                            {row.created_at ? new Date(row.created_at).toLocaleString("ar-SA") : "-"}
+                          <td className="px-3 py-3 text-xs text-ink/68">
+                            {row.created_at ? new Date(row.created_at).toLocaleDateString("ar-SA") : "-"}
                           </td>
-                          <td className="px-4 py-3 text-sm font-bold text-ink">{row.full_name || "-"}</td>
-                          <td className="px-4 py-3 text-sm font-black text-jade">{row.plan_code || "-"}</td>
-                          <td className="px-4 py-3 text-xs text-ink/68">{row.phone || "-"}</td>
-                          <td className="max-w-[11rem] px-4 py-3 text-xs font-bold text-ink/72">
-                            {bookingType === "family" ? (
-                              <>
-                                عائلة ·{" "}
-                                {familyMembers != null && !Number.isNaN(familyMembers)
-                                  ? `${familyMembers} أفراد`
-                                  : inferredFamily != null
-                                    ? `${inferredFamily} أفراد (من النص)`
-                                    : "—"}
-                                {travelersCount != null ? ` (${travelersCount} مسافر)` : ""}
-                              </>
-                            ) : bookingType === "solo" ? (
-                              <>
-                                فرد/أصدقاء · رفقة: {soloCompanions}
-                                {travelersCount != null ? ` · إجمالي ${travelersCount}` : ""}
-                              </>
-                            ) : travelersCount != null ? (
-                              <>مسافرون: {travelersCount}</>
-                            ) : inferredFamily != null ? (
-                              <>عائلة (من النص) · {inferredFamily} أفراد</>
-                            ) : (
-                              "—"
-                            )}
-                            {row.price_summary ? (
-                              <p className="mt-1 line-clamp-2 text-[10px] font-medium text-ink/48" title={row.price_summary}>
-                                {row.price_summary}
-                              </p>
-                            ) : null}
-                            {meta && !row.booking_type ? (
-                              <p className="mt-1 text-[10px] font-bold text-saffron/90">من الملاحظات (BOOKING_META)</p>
-                            ) : null}
-                          </td>
-                          <td className="px-4 py-3 text-xs font-black text-marine">
-                            {quotedUsd != null && !Number.isNaN(quotedUsd) ? `$${quotedUsd}` : "—"}
-                          </td>
-                          <td className="px-4 py-3">
+                          <td className="px-3 py-3 text-xs font-bold text-ink line-clamp-1" title={row.full_name}>{row.full_name || "-"}</td>
+                          <td className="px-3 py-3 text-sm font-black text-jade">{row.plan_code || "-"}</td>
+                          <td className="px-3 py-3">
                             <select
                               value={row.status || "new"}
                               onChange={(e) => updatePlanRequestStatus(row.id, e.target.value)}
-                              className="max-w-[10rem] cursor-pointer rounded-xl border border-ink/12 bg-linen px-2 py-1.5 text-xs font-black text-ink outline-none focus:border-jade"
+                              className="w-full max-w-[9rem] cursor-pointer rounded-lg border border-ink/12 bg-linen px-1.5 py-1 text-xs font-bold text-ink outline-none focus:border-jade"
                             >
-                              <option value="new">جديد / Pending</option>
-                              <option value="contacted">تم التواصل / In contact</option>
-                              <option value="confirmed">مقبول / Accepted</option>
-                              <option value="rejected">مرفوض / Rejected</option>
-                              <option value="cancelled">ملغى / Cancelled</option>
+                              <option value="new">جديد</option>
+                              <option value="contacted">تواصل</option>
+                              <option value="confirmed">مقبول</option>
+                              <option value="rejected">مرفوض</option>
+                              <option value="cancelled">ملغى</option>
                             </select>
                           </td>
-                          <td className="px-4 py-3">
+                          <td className="px-3 py-3">
                             {payPath ? (
                               <button
                                 type="button"
                                 onClick={() => openSignedPrivatePreview(`إثبات دفع — ${row.full_name}`, payPath)}
-                                className="rounded-lg bg-marine/15 px-2 py-1 text-xs font-black text-marine hover:bg-marine/25"
+                                className="rounded-lg bg-marine/15 px-2 py-1 text-xs font-black text-marine hover:bg-marine/25 transition"
                               >
                                 عرض
                               </button>
@@ -797,18 +786,29 @@ export default function AdminDashboard({ goHome }) {
                               <span className="text-xs text-ink/40">—</span>
                             )}
                           </td>
-                          <td className="px-4 py-3">
+                          <td className="px-3 py-3">
                             {passPath ? (
                               <button
                                 type="button"
                                 onClick={() => openSignedPrivatePreview(`جواز — ${row.full_name}`, passPath)}
-                                className="rounded-lg bg-jade/15 px-2 py-1 text-xs font-black text-jade hover:bg-jade/25"
+                                className="rounded-lg bg-jade/15 px-2 py-1 text-xs font-black text-jade hover:bg-jade/25 transition"
                               >
                                 عرض
                               </button>
                             ) : (
                               <span className="text-xs text-ink/40">—</span>
                             )}
+                          </td>
+                          <td className="px-3 py-3">
+                            <button
+                              type="button"
+                              onClick={() => deleteBooking(row.id)}
+                              disabled={loading}
+                              className="rounded-lg bg-red-100 px-2 py-1 text-xs font-black text-red-600 hover:bg-red-200 transition disabled:opacity-50"
+                              title="حذف الحجز"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
                           </td>
                         </tr>
                       );

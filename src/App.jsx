@@ -602,20 +602,22 @@ function App() {
 
       <main>
         <section id="home" className="relative min-h-[92vh] pt-20">
-          <div className="image-scrim absolute inset-0 overflow-hidden">
+          <div className="image-scrim absolute inset-0 overflow-hidden bg-gradient-to-b from-ink/20 to-ink/40">
             <img
               src={heroBackdropSrc}
               alt=""
               aria-hidden
-              className="hero-kenburns-a pointer-events-none absolute inset-0 h-full w-full object-cover"
+              className="hero-kenburns-a hero-image-animated image-quality-boost pointer-events-none absolute inset-0 h-full w-full object-cover"
               decoding="async"
               fetchpriority="high"
+              loading="eager"
             />
             <img
               src={heroBackdropSrc}
               alt="Al Hosn Castle"
-              className="hero-kenburns-b hero-shimmer pointer-events-none absolute inset-0 h-full w-full object-cover mix-blend-soft-light"
+              className="hero-kenburns-b hero-shimmer hero-image-animated image-quality-boost pointer-events-none absolute inset-0 h-full w-full object-cover mix-blend-soft-light"
               decoding="async"
+              loading="eager"
             />
           </div>
           <div className="ambient-band pointer-events-none absolute -inset-10 z-[1] opacity-70" />
@@ -723,11 +725,13 @@ function App() {
                       Featured
                     </div>
                   )}
-                  <div className="relative aspect-[4/3] overflow-hidden">
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
                     <img
                       src={plan.image}
                       alt={plan.name}
-                      className="h-full w-full object-cover transition duration-700 group-hover:scale-110 group-hover:rotate-1"
+                      className="h-full w-full object-cover transition duration-700 group-hover:scale-110 group-hover:rotate-1 image-quality-boost"
+                      loading="lazy"
+                      decoding="async"
                     />
                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/82 to-transparent p-5 text-white">
                       <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-xl font-black text-ink">
@@ -824,7 +828,7 @@ function App() {
                               : "translateX(0) scale(0.72)",
                       }}
                     >
-                      <img src={item.src} alt={item.title} className="h-full w-full object-cover" />
+                      <img src={item.src} alt={item.title} className="h-full w-full object-cover image-quality-boost" loading="lazy" decoding="async" />
                       <div className="absolute inset-0 bg-gradient-to-t from-ink/88 via-ink/12 to-transparent" />
                       <div className="absolute inset-x-0 bottom-0 p-6 text-white">
                         {isActive && (
@@ -899,7 +903,9 @@ function App() {
               <img
                 src={publicImagePath("damascus four session hotel.jpg")}
                 alt="Comfortable hotel stay"
-                className="hero-kenburns h-full w-full object-cover"
+                className="hero-kenburns hero-image-animated image-quality-boost h-full w-full object-cover"
+                loading="lazy"
+                decoding="async"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/76 to-transparent" />
               <div className="absolute bottom-0 p-7 text-white">
@@ -1068,8 +1074,9 @@ function App() {
                   <img
                     src={destinationDetail.src}
                     alt={destinationDetail.title}
-                    className="max-h-[min(48vh,380px)] w-full rounded-2xl object-contain object-center shadow-sm md:max-h-full md:max-w-full"
+                    className="max-h-[min(48vh,380px)] w-full rounded-2xl object-contain object-center shadow-sm image-quality-boost md:max-h-full md:max-w-full"
                     decoding="async"
+                    loading="lazy"
                   />
                 </div>
                 <div className="flex min-h-0 flex-col gap-4 overflow-y-auto p-6 sm:p-8 md:max-h-full">
