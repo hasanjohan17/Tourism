@@ -3,7 +3,8 @@ import react from "@vitejs/plugin-react";
 
 /** Set VITE_BASE_PATH=/repo-name/ for GitHub Pages project sites. */
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), "");
+  // Load ALL env variables with VITE_ prefix
+  const env = loadEnv(mode, process.cwd(), "VITE_");
   const base = env.VITE_BASE_PATH || "/";
 
   return {
