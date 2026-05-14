@@ -1030,8 +1030,8 @@ function App() {
                   ))}
               </div>
               <p className="mt-4 max-w-xs text-center text-xs font-bold text-white/45 md:text-left">
-                Set your WhatsApp number and social URLs in <code className="rounded bg-white/10 px-1">.env</code> (see{" "}
-                <code className="rounded bg-white/10 px-1">.env.example</code>).
+                 {/* <code className="rounded bg-white/10 px-1"></code> {" "}
+                <code className="rounded bg-white/10 px-1"></code> */}
               </p>
             </div>
           </div>
