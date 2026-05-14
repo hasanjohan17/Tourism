@@ -1,4 +1,4 @@
-const image = (name) => `/images/${encodeURIComponent(name)}`;
+const image = (name) => `${import.meta.env.BASE_URL}images/${encodeURIComponent(name)}`;
 
 /** قلعة الحصن (حمص) — مسار الصور الثابت للخلفية */
 export const alHosnCastleSrc = image("Homs Al Hosn Castle.jpg");

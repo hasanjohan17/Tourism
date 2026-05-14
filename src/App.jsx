@@ -34,6 +34,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import PlanRequestPage from "./pages/PlanRequestPage";
 import MyBookingsPage from "./pages/MyBookingsPage";
 
+const publicImagePath = (name) => `${import.meta.env.BASE_URL}images/${encodeURIComponent(name)}`;
+
 const navItems = [
   { label: "Home", href: "#home" },
   { label: "Plans", href: "#plans" },
@@ -895,7 +897,7 @@ function App() {
           <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8">
             <div className="relative min-h-[480px] overflow-hidden rounded-[2rem]">
               <img
-                src="/images/damascus four session hotel.jpg"
+                src={publicImagePath("damascus four session hotel.jpg")}
                 alt="Comfortable hotel stay"
                 className="hero-kenburns h-full w-full object-cover"
               />
