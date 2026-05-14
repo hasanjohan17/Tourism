@@ -329,3 +329,87 @@ img[src*="png"] {
     -0.1rem -0.1rem 0.4rem rgba(255, 255, 255, 0.2),
     inset 0.1rem 0.1rem 0.3rem rgba(255, 255, 255, 0.15);
 }
+
+/* Glass / subtle skew shine — surfaces & CTAs */
+.glass-morphic-surface {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(148deg, rgba(255, 255, 255, 0.9), rgba(248, 244, 237, 0.72));
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow:
+    0 18px 46px rgba(23, 33, 43, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(18px) saturate(155%);
+  -webkit-backdrop-filter: blur(18px) saturate(155%);
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s ease;
+}
+
+.glass-morphic-surface::after {
+  position: absolute;
+  top: -40%;
+  left: -30%;
+  width: 45%;
+  height: 180%;
+  rotate: -12deg;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.42), transparent);
+  content: "";
+  opacity: 0.5;
+  pointer-events: none;
+  transform: skewX(-12deg);
+}
+
+@media (hover: hover) and (min-width: 768px) {
+  .glass-morphic-surface:hover {
+    box-shadow:
+      0 24px 56px rgba(15, 94, 110, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    transform: translateY(-3px) perspective(900px) rotateX(1deg);
+  }
+}
+
+.glass-morphic-button {
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease;
+}
+
+.glass-morphic-button::before {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
+  content: "";
+  opacity: 0;
+  transform: translateX(-60%) skewX(-12deg);
+  transition: opacity 0.35s ease, transform 0.5s ease;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .glass-morphic-button:hover::before {
+    opacity: 1;
+    transform: translateX(40%) skewX(-12deg);
+  }
+
+  .glass-morphic-button:hover {
+    transform: translateY(-2px) skewX(-0.5deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-morphic-surface:hover,
+  .glass-morphic-button:hover {
+    transform: none;
+  }
+
+  .glass-morphic-button:hover::before {
+    opacity: 0;
+    transform: none;
+  }
+}

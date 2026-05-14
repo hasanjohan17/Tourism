@@ -497,23 +497,28 @@ export default function AdminDashboard({ goHome }) {
     }
     if (
       !confirm(
-        "تحذير: سيتم حذف سجل المستخدم والبيانات الشخصية. هل أنت متأكد؟",
+        "تحذير: سيتم حذف حجوزات هذا المستخدم ثم ملفه الشخصي من قاعدة البيانات. هل أنت متأكد؟",
       )
     ) {
       return;
     }
     try {
       setLoading(true);
-      // Delete from profiles table
+
+      const { error: bookingDelError } = await supabase.from("plan_requests").delete().eq("user_id", userId);
+      if (bookingDelError) {
+        throw new Error("تعذر حذف حجوزات المستخدم: " + bookingDelError.message);
+      }
+
       const { error: profileError } = await supabase.from("profiles").delete().eq("id", userId);
-      
+
       if (profileError) {
         throw profileError;
       }
-      
-      // Try to delete auth user via admin API (if you have backend)
-      // For now, just notify about profiles table deletion
-      alert("تم حذف سجل المستخدم بنجاح. يمكنك حذف حساب المصادقة من Supabase Dashboard إذا لزم الأمر.");
+
+      alert(
+        "تم حذف سجل المستخدم وحجوزاته من قاعدة البيانات. حساب تسجيل الدخول (Auth) ما زال في Supabase — لحذفه نهائياً استخدم Dashboard → Authentication أو Edge Function بمفتاح الخدمة.",
+      );
       await loadUsers();
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -634,7 +639,7 @@ export default function AdminDashboard({ goHome }) {
               />
             </div>
 
-            <div className="overflow-x-auto rounded-2xl bg-white shadow-soft">
+            <div className="overflow-x-auto rounded-2xl bg-white/95 shadow-soft glass-morphic-surface">
               <table className="w-full">
                 <thead className="border-b border-ink/8 bg-linen">
                   <tr>
@@ -719,7 +724,7 @@ export default function AdminDashboard({ goHome }) {
             <p className="mb-6 text-sm font-bold text-ink/56">
               إثبات الدفع وصورة الجواز تُعرض برابط آمن لمدة ساعة. الطلبات القديمة تُستخرج من نص الملاحظات إن لزم.
             </p>
-            <div className="overflow-x-auto rounded-2xl bg-white shadow-soft">
+            <div className="overflow-x-auto rounded-2xl bg-white/95 shadow-soft glass-morphic-surface">
               <table className="w-full min-w-[800px]">
                 <thead className="border-b border-ink/8 bg-linen">
                   <tr>
@@ -735,7 +740,7 @@ export default function AdminDashboard({ goHome }) {
                 <tbody>
                   {planRequests.length === 0 ? (
                     <tr>
-                      <td colSpan="9" className="px-4 py-8 text-center text-sm text-ink/56">
+                      <td colSpan="7" className="px-4 py-8 text-center text-sm text-ink/56">
                         لا توجد طلبات حجز بعد
                       </td>
                     </tr>
@@ -839,7 +844,7 @@ export default function AdminDashboard({ goHome }) {
             {showDestinationForm && (
               <form
                 onSubmit={addDestination}
-                className="mb-8 rounded-2xl bg-white p-6 shadow-soft"
+                className="mb-8 rounded-2xl bg-white/95 p-6 shadow-soft glass-morphic-surface"
               >
                 <h3 className="mb-4 text-lg font-black text-ink">إضافة منشور جديد</h3>
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -953,7 +958,7 @@ export default function AdminDashboard({ goHome }) {
                 <div
                   key={destination.id}
                   style={{ animationDelay: `${Math.min(idx, 8) * 55}ms` }}
-                  className="animate-fade-in-up overflow-hidden rounded-2xl bg-white shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-lift"
+                  className="animate-fade-in-up overflow-hidden rounded-2xl bg-white/95 shadow-soft glass-morphic-surface transition duration-300 hover:-translate-y-1 hover:shadow-lift"
                 >
                   {destination.image_url && (
                     <img
@@ -998,7 +1003,7 @@ export default function AdminDashboard({ goHome }) {
             </div>
 
             {showPlanForm && (
-              <form onSubmit={addPlan} className="mb-8 rounded-2xl bg-white p-6 shadow-soft">
+              <form onSubmit={addPlan} className="mb-8 rounded-2xl bg-white/95 p-6 shadow-soft glass-morphic-surface">
                 <h3 className="mb-4 text-lg font-black text-ink">إضافة خطة جديدة</h3>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <label className="block">
@@ -1141,7 +1146,7 @@ export default function AdminDashboard({ goHome }) {
                 <div
                   key={plan.id}
                   style={{ animationDelay: `${Math.min(idx, 6) * 60}ms` }}
-                  className="animate-fade-in-up overflow-hidden rounded-2xl bg-white shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-lift"
+                  className="animate-fade-in-up overflow-hidden rounded-2xl bg-white/95 shadow-soft glass-morphic-surface transition duration-300 hover:-translate-y-1 hover:shadow-lift"
                 >
                   {plan.image_url && (
                     <img
@@ -1188,7 +1193,7 @@ export default function AdminDashboard({ goHome }) {
           onClick={() => setImagePreview(null)}
         >
           <div
-            className="relative max-h-[92vh] w-full max-w-4xl overflow-hidden rounded-2xl bg-white p-3 shadow-lift"
+            className="glass-morphic-surface relative max-h-[92vh] w-full max-w-4xl overflow-hidden rounded-2xl bg-white/95 p-3 shadow-lift"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between gap-3 border-b border-ink/10 px-2 pb-2">

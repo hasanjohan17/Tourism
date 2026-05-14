@@ -643,7 +643,7 @@ function App() {
                 <div className="animate-reveal-soft relative mt-8 flex flex-col flex-wrap gap-3 motion-reduce:animate-none sm:flex-row [animation-delay:200ms]">
                   <a
                     href="#plans"
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-saffron px-6 py-3.5 text-sm font-black text-ink shadow-lift transition duration-300 hover:-translate-y-1 hover:scale-[1.03] hover:shadow-[0_14px_40px_rgba(217,159,61,0.45)] active:scale-[0.98]"
+                    className="glass-morphic-button inline-flex items-center justify-center gap-2 rounded-full bg-saffron px-6 py-3.5 text-sm font-black text-ink shadow-lift transition duration-300 hover:-translate-y-1 hover:scale-[1.03] hover:shadow-[0_14px_40px_rgba(217,159,61,0.45)] active:scale-[0.98]"
                   >
                     Explore plans
                     <ArrowRight className="h-4 w-4" />
@@ -651,7 +651,7 @@ function App() {
                   <button
                     type="button"
                     onClick={() => (session ? setAccountOpen(true) : setAuthOpen(true))}
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 bg-white/12 px-6 py-3.5 text-sm font-black text-white backdrop-blur transition duration-300 hover:-translate-y-1 hover:bg-white hover:text-ink active:scale-[0.98]"
+                    className="glass-morphic-button inline-flex items-center justify-center gap-2 rounded-full border border-white/30 bg-white/12 px-6 py-3.5 text-sm font-black text-white backdrop-blur transition duration-300 hover:-translate-y-1 hover:bg-white hover:text-ink active:scale-[0.98]"
                   >
                     {session ? <UserRound className="h-4 w-4" /> : <LogIn className="h-4 w-4" />}
                     {session ? "Open My Account" : "First time visiting us? Log in"}
@@ -659,7 +659,7 @@ function App() {
                   {session ? (
                     <a
                       href="#my-bookings"
-                      className="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 bg-white/12 px-6 py-3.5 text-sm font-black text-white backdrop-blur transition duration-300 hover:-translate-y-1 hover:bg-white hover:text-ink active:scale-[0.98]"
+                      className="glass-morphic-button inline-flex items-center justify-center gap-2 rounded-full border border-white/30 bg-white/12 px-6 py-3.5 text-sm font-black text-white backdrop-blur transition duration-300 hover:-translate-y-1 hover:bg-white hover:text-ink active:scale-[0.98]"
                     >
                       <CalendarDays className="h-4 w-4" />
                       My Bookings
@@ -668,7 +668,7 @@ function App() {
                 </div>
               </div>
 
-              <div className="glass-panel hero-reveal rounded-[2rem] p-4 shadow-soft transition duration-500 ease-out hover:-translate-y-1 hover:shadow-lift [animation-delay:180ms]">
+              <div className="glass-morphic-surface glass-panel hero-reveal rounded-[2rem] p-4 shadow-soft transition duration-500 ease-out hover:-translate-y-1 hover:shadow-lift [animation-delay:180ms]">
                 <div className="grid grid-cols-3 gap-3">
                   {stats.map((stat, i) => (
                     <div
@@ -716,7 +716,7 @@ function App() {
                 <article
                   key={plan.id}
                   style={{ animationDelay: `${index * 80}ms` }}
-                  className={`animate-fade-in-up group relative overflow-hidden rounded-[1.75rem] border bg-white shadow-soft transition duration-500 ease-out will-change-transform hover:-translate-y-2 hover:shadow-lift hover:ring-2 hover:ring-jade/25 ${
+                  className={`glass-morphic-surface animate-fade-in-up group relative overflow-hidden rounded-[1.75rem] border bg-white/90 shadow-soft transition duration-500 ease-out will-change-transform hover:-translate-y-2 hover:shadow-lift hover:ring-2 hover:ring-jade/25 ${
                     plan.featured ? "border-jade/40 ring-4 ring-jade/10" : "border-ink/8"
                   }`}
                 >
@@ -952,7 +952,7 @@ function App() {
                 Reach out to our team via WhatsApp to customize your perfect itinerary. We're here to answer all your questions and craft an unforgettable experience tailored to your needs.
               </p>
             </div>
-            <div className="rounded-[1.75rem] bg-white p-5 text-ink shadow-soft">
+            <div className="glass-morphic-surface rounded-[1.75rem] bg-white/95 p-5 text-ink shadow-soft">
               <div className="flex items-center gap-3">
                 <span className="grid h-12 w-12 place-items-center rounded-2xl bg-jade/10 text-jade">
                   <MapPin className="h-6 w-6" />
@@ -1059,7 +1059,7 @@ function App() {
             aria-label="Close destination details"
             onClick={() => setDestinationDetail(null)}
           />
-          <div className="relative flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-[2rem] bg-white shadow-2xl ring-1 ring-ink/10 md:max-h-[min(92vh,720px)]">
+          <div className="glass-morphic-surface relative flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-[2rem] bg-white/95 shadow-2xl ring-1 ring-ink/10 md:max-h-[min(92vh,720px)]">
             <button
               type="button"
               onClick={() => setDestinationDetail(null)}

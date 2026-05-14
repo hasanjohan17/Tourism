@@ -319,6 +319,12 @@ on public.plan_requests for update
 using (public.is_admin())
 with check (public.is_admin());
 
+drop policy if exists "plan_requests_delete_admin" on public.plan_requests;
+create policy "plan_requests_delete_admin"
+on public.plan_requests for delete
+to authenticated
+using (public.is_admin());
+
 insert into public.destinations (title, tag, description, image_url, location, sort_order)
 values
   ('دمشق القديمة', 'تاريخ حي', 'مسار تراثي بين الأسواق والمعالم القديمة.', '/images/damascus%20umaayya.jpg', 'Damascus', 10),
