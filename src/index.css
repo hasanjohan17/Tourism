@@ -1,0 +1,185 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color: #17212b;
+  background: #f8f4ed;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  direction: ltr;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+img {
+  max-width: 100%;
+  image-rendering: auto;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  backdrop-filter: blur(18px);
+}
+
+.image-scrim::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background:
+    linear-gradient(90deg, rgba(23, 33, 43, 0.22), rgba(23, 33, 43, 0.78)),
+    linear-gradient(0deg, rgba(23, 33, 43, 0.46), transparent 42%);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.hero-kenburns {
+  animation: heroKenburns 18s ease-in-out infinite alternate;
+}
+
+.hero-kenburns-a {
+  animation: heroKenburns 22s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.hero-kenburns-b {
+  animation: heroKenburnsReverse 28s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+.hero-shimmer {
+  animation: heroShimmer 14s ease-in-out infinite;
+}
+
+.hero-reveal {
+  animation: heroReveal 900ms ease both;
+}
+
+.float-slow {
+  animation: floatSlow 7s ease-in-out infinite;
+}
+
+.float-delay {
+  animation: floatSlow 8s ease-in-out 1s infinite reverse;
+}
+
+.ambient-band {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(21, 154, 140, 0.26), transparent 34%),
+    radial-gradient(circle at 80% 18%, rgba(217, 159, 61, 0.2), transparent 30%),
+    linear-gradient(120deg, rgba(15, 94, 110, 0.16), transparent, rgba(21, 154, 140, 0.12));
+  animation: ambientDrift 16s ease-in-out infinite alternate;
+}
+
+.gallery-card {
+  transition:
+    transform 600ms cubic-bezier(0.2, 0.75, 0.2, 1),
+    filter 600ms ease,
+    opacity 600ms ease;
+}
+
+@keyframes heroKenburnsReverse {
+  0% {
+    transform: scale(1.06) translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: scale(1.16) translate3d(2.2%, -2%, 0);
+  }
+}
+
+@keyframes heroShimmer {
+  0%,
+  100% {
+    opacity: 0.38;
+  }
+
+  50% {
+    opacity: 0.52;
+  }
+}
+
+@keyframes heroKenburns {
+  0% {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: scale(1.14) translate3d(-2.5%, 1.5%, 0);
+  }
+}
+
+@keyframes heroReveal {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatSlow {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate3d(12px, -18px, 0) rotate(2deg);
+  }
+}
+
+@keyframes ambientDrift {
+  0% {
+    transform: translate3d(-2%, -1%, 0) scale(1);
+  }
+
+  100% {
+    transform: translate3d(2%, 1%, 0) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-reveal-soft,
+  .animate-gentle-scale,
+  .animate-border-pulse,
+  .animate-subtle-float {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    box-shadow: none !important;
+  }
+}
