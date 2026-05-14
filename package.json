@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "deploy:root": "npm run build && powershell -Command \"if (-not (Test-Path 'assets')) { New-Item -ItemType Directory -Path 'assets' | Out-Null }; Copy-Item -Path 'dist/assets/*' -Destination 'assets' -Recurse -Force\""
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.4",
