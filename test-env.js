@@ -4,6 +4,13 @@
  * Run: node test-env.js
  */
 
+// Load .env.local when running this script directly for convenience
+try {
+  require("dotenv").config({ path: ".env.local" });
+} catch (e) {
+  // dotenv may not be installed; ignore
+}
+
 console.log("\n🔍 Checking environment variables...\n");
 
 console.log("VITE_SUPABASE_URL:", process.env.VITE_SUPABASE_URL || "❌ NOT SET");

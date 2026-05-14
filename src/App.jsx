@@ -245,7 +245,6 @@ function App() {
   const handleAuth = async (event) => {
     event.preventDefault();
     setAuthMessage("");
-
     if (!isSupabaseConfigured) {
       setAuthMessage("Add Supabase keys in the .env file to enable login.");
       return;
@@ -253,66 +252,84 @@ function App() {
 
     const fullNameValue = `${form.firstName.trim()} ${form.lastName.trim()}`.trim();
     const credentials = { email: form.email.trim(), password: form.password };
-    const response =
-      authMode === "signin"
-        ? await supabase.auth.signInWithPassword(credentials)
-        : await supabase.auth.signUp({
-            ...credentials,
-            options: {
-              data: {
-                first_name: form.firstName.trim(),
-                last_name: form.lastName.trim(),
-                full_name: fullNameValue,
-                phone: form.phone.trim(),
-                region: form.region.trim(),
-              },
+
+    try {
+      let response;
+
+      if (authMode === "signin") {
+        response = await supabase.auth.signInWithPassword(credentials);
+      } else {
+        response = await supabase.auth.signUp({
+          ...credentials,
+          options: {
+            data: {
+              first_name: form.firstName.trim(),
+              last_name: form.lastName.trim(),
+              full_name: fullNameValue,
+              phone: form.phone.trim(),
+              region: form.region.trim(),
             },
-          });
-
-    if (response.error) {
-      setAuthMessage(response.error.message);
-      return;
-    }
-
-    let signupDetailError = null;
-
-    if (authMode === "signup" && response.data.session) {
-      const userId = response.data.user.id;
-
-      const profileData = {
-        id: userId,
-        email: form.email.trim(),
-        first_name: form.firstName.trim(),
-        last_name: form.lastName.trim(),
-        full_name: fullNameValue,
-        phone: form.phone.trim(),
-        region: form.region.trim(),
-        role: "traveler",
-      };
-
-      const { error: profileError } = await supabase.from("profiles").upsert([profileData], { onConflict: "id" }).select();
-
-      if (profileError) {
-        console.error("Profile upsert error:", profileError);
-        signupDetailError =
-          "Account created but there was an issue saving your details: " + profileError.message;
+          },
+        });
       }
-    }
 
-    if (authMode === "signin") {
-      setAuthMessage("Login completed successfully.");
-    } else {
-      setAuthMessage(
-        signupDetailError ??
-          (response.data.session
-            ? "Account created successfully."
-            : "Account created. Check your email if confirmation is enabled."),
-      );
-    }
+      // log full response for debugging (do not leak secrets)
+      console.debug("Supabase auth response:", response);
 
-    if (response.data.session) {
-      setAuthOpen(false);
-      setForm({ firstName: "", lastName: "", phone: "", email: "", password: "", region: "" });
+      if (response.error) {
+        // supabase-js v2 returns error object
+        setAuthMessage(response.error.message || JSON.stringify(response.error));
+        return;
+      }
+
+      let signupDetailError = null;
+
+      // If signup succeeded and session is present, upsert profile (RLS requires id==auth.uid()).
+      if (authMode === "signup") {
+        // If server requires email confirmation, response.data.session may be null.
+        if (response.data?.session) {
+          const userId = response.data.user.id;
+
+          const profileData = {
+            id: userId,
+            email: form.email.trim(),
+            first_name: form.firstName.trim(),
+            last_name: form.lastName.trim(),
+            full_name: fullNameValue,
+            phone: form.phone.trim(),
+            region: form.region.trim(),
+            role: "traveler",
+          };
+
+          const { error: profileError } = await supabase.from("profiles").upsert([profileData], { onConflict: "id" }).select();
+
+          if (profileError) {
+            console.error("Profile upsert error:", profileError);
+            signupDetailError =
+              "Account created but there was an issue saving your details: " + profileError.message;
+          }
+        }
+      }
+
+      // Provide clear messages depending on auth flow
+      if (authMode === "signin") {
+        setAuthMessage("Login completed successfully.");
+      } else {
+        setAuthMessage(
+          signupDetailError ??
+            (response.data?.session
+              ? "Account created successfully."
+              : "Account created. Check your email to confirm your address (if confirmation is enabled)."),
+        );
+      }
+
+      if (response.data?.session) {
+        setAuthOpen(false);
+        setForm({ firstName: "", lastName: "", phone: "", email: "", password: "", region: "" });
+      }
+    } catch (err) {
+      console.error("Auth flow unexpected error:", err);
+      setAuthMessage(err?.message || "Unexpected error during authentication. Check console for details.");
     }
   };
 

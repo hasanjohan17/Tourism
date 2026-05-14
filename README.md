@@ -1,57 +1,65 @@
-# Tourism project
+# Tourism
 
-React + Vite + Supabase. Live demo can be hosted on [GitHub Pages](https://pages.github.com/) for repo `tourism-project` at:
+React + Vite + Supabase.
 
-`https://hasanjohan17.github.io/tourism-project/`
+**المستودع المقصود:** [hasanjohan17/Tourism](https://github.com/hasanjohan17/Tourism)  
+**GitHub Pages (بعد تفعيل Actions):** `https://hasanjohan17.github.io/Tourism/`
 
-## ⚡ البدء السريع
+> لا تشارك كلمة مرور GitHub أو “صلاحية كاملة” مع أي طرف. استخدم **Personal Access Token** أو **SSH** من جهازك فقط.
 
-### التطوير المحلي
+## رفع المشروع إلى `Tourism.git` (أول مرة أو نقل من ريبو آخر)
+
+من مجلد المشروع على جهازك:
 
 ```bash
-# 1. اقرأ تعليمات الإعداد
-cat SETUP_SUPABASE.md
+# إن كان الريبو فارغاً على GitHub — اربط origin بالريبو الجديد ثم ادفع
+git remote remove origin   # فقط إن كنت تريد استبدال الرابط القديم
+git remote add origin https://github.com/hasanjohan17/Tourism.git
+git branch -M main
+git add -A
+git commit -m "Initial push: Tourism site"
+git push -u origin main
+```
 
-# 2. أضف مفاتيح Supabase إلى .env.local
-# ثم:
+إن أردت **الإبقاء على الرابط القديم** وإضافة ريبو جديد:
 
+```bash
+git remote add tourism https://github.com/hasanjohan17/Tourism.git
+git push -u tourism main
+```
+
+عند الطلب منك اسم مستخدم وكلمة مرور في الطرفية، استخدم **PAT** بدل كلمة المرور:  
+GitHub → **Settings → Developer settings → Personal access tokens** → صلاحية `repo`.
+
+## التطوير المحلي
+
+راجع [SETUP_SUPABASE.md](SETUP_SUPABASE.md) لمفاتيح Supabase، ثم انسخ `.env.example` إلى `.env.local` وعدّل القيم.
+
+```bash
 npm install
 npm run dev
 ```
 
-زيارة `http://localhost:5174/`
-
-### الاختبار
+للبناء بنفس مسار GitHub Pages محلياً:
 
 ```bash
-# تحقق من أن المتغيرات محملة
-node test-env.js
+set VITE_BASE_PATH=/Tourism/
+npm run build
+npm run preview
 ```
 
-## GitHub Pages — لماذا التحديث لا يظهر؟
+(في PowerShell: `$env:VITE_BASE_PATH="/Tourism/"; npm run build`)
 
-1. **فعّل GitHub Actions للنشر:** في المستودع → **Settings** → **Pages** → **Build and deployment** → اختر **Source: GitHub Actions** (وليس Branch قديم لـ `gh-pages` إن كان عطلاً).
-2. ادفع إلى فرع **`main`** — سيعمل workflow في `.github/workflows/deploy.yml` ويبني المشروع ويرفع `dist` تلقائياً.
-3. **مسار الموقع:** المشروع افتراضياً يبني على `base: /` (مناسب لـ Vercel). في GitHub Pages نضبطه من خلال `VITE_BASE_PATH=/tourism-project/` داخل workflow.
-4. **🔑 أسرار البناء (مهم):** في **Settings → Secrets and variables → Actions** أضف:
-   - `VITE_SUPABASE_URL`
-   - `VITE_SUPABASE_ANON_KEY`
-   
-   حتى يعمل الموقع على GitHub Pages مع Supabase (اتبع [SETUP_SUPABASE.md](SETUP_SUPABASE.md)).
+## GitHub Pages
 
-5. النشر اليدوي القديم: `npm run deploy` (فرع `gh-pages`) — إن كنت ما زلت تستخدمه، شغّله بعد كل تحديث، أو اعتمد Actions فقط لتفادي الازدواجية.
+1. **Settings → Pages → Build and deployment → Source:** اختر **GitHub Actions**.
+2. أي **push** إلى **`main`** يشغّل `.github/workflows/deploy-github-pages.yml`.
+3. في **Settings → Secrets and variables → Actions** أضف على الأقل: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` (وباقي المتغيرات من `.env.example` إن لزم).
+4. الـ workflow يضبط `VITE_BASE_PATH=/Tourism/` تلقائياً ليتوافق مع عنوان الصفحة.
 
-## Vercel
+## حذف الحجوزات (RLS)
 
-- Framework preset: **Vite**
-- Build command: `npm run build`
-- Output directory: `dist`
-- لا تضف `VITE_BASE_PATH` في Vercel (اتركه فارغاً أو احذفه) حتى يبقى `base=/`.
-- أضف متغيّرات البيئة نفسها: `VITE_SUPABASE_URL` و `VITE_SUPABASE_ANON_KEY`
-
-## حذف الحجوزات من Supabase
-
-شغّل في SQL Editor سياسة الحذف (موجودة أيضاً في `supabase/schema.sql`):
+شغّل في Supabase SQL Editor (أو من `supabase/schema.sql`):
 
 ```sql
 drop policy if exists "plan_requests_delete_admin" on public.plan_requests;
@@ -61,4 +69,4 @@ to authenticated
 using (public.is_admin());
 ```
 
-المستودع على GitHub: [hasanjohan17/tourism-project](https://github.com/hasanjohan17/tourism-project).
+ملف جاهز: `supabase/sql/plan_requests_delete_admin.sql`.

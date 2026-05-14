@@ -33,7 +33,7 @@ jobs:
 
       - name: Build
         env:
-          VITE_BASE_PATH: /tourism-project/
+          VITE_BASE_PATH: /Tourism/
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           VITE_WHATSAPP_E164: ${{ secrets.VITE_WHATSAPP_E164 }}
