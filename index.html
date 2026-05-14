@@ -17,21 +17,6 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="module">
-      const assetVersion = "v=20260514-1";
-      const basePath = `${window.location.pathname.replace(/[^/]*$/, "")}`;
-      const isLocalDev = ["localhost", "127.0.0.1"].includes(window.location.hostname);
-      const script = document.createElement("script");
-      script.type = "module";
-      script.src = isLocalDev ? `${basePath}src/main.jsx` : `${basePath}assets/main.js?${assetVersion}`;
-      document.body.appendChild(script);
-
-      if (!isLocalDev) {
-        const stylesheet = document.createElement("link");
-        stylesheet.rel = "stylesheet";
-        stylesheet.href = `${basePath}assets/main.css?${assetVersion}`;
-        document.head.appendChild(stylesheet);
-      }
-    </script>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
